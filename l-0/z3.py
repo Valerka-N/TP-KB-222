@@ -1,9 +1,13 @@
 import math
 
+def dis(a, b, c):
+    return b**2 - 4*a*c
+
 a = float(input("a: "))
 b = float(input("b: "))
 c = float(input("c: "))
-D = b**2 - 4*a*c
+D = dis(a, b, c)
+print (D)
 if D > 0:
     x1 = (-b + math.sqrt(D)) / (2*a)
     x2 = (-b - math.sqrt(D)) / (2*a)
