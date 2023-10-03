@@ -1,5 +1,5 @@
-# 2023-09-13
-add folder l-0
-add solution for z1 z2 and z3
+# 2023-10-3
+add folder l-2
+add solution for x1 x2 and x3
 
 # TP-KB-222-Nazarenko-Valeria
