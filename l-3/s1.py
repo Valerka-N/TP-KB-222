@@ -28,50 +28,69 @@ def validate_operator(operator):
     valid_operators = ['+', '-', '*', '/', '**', 'sqrt']
     return operator in valid_operators
 
-while True:
-    print("Make a feature selection:")
-    print("1. +")
-    print("2. -")
-    print("3. *")
-    print("4. /")
-    print("5. **")
-    print("6. Square root extraction")
-    print("7. Exit")
+def genFloatValue(prompt: str):
+    while True:
+        try:
+            return float(input(prompt))
+        except ValueError:
+            print("Invalid input. Please enter a valid number.")
 
-    choice = input("Enter the operator of the function to perform (+/-/*///**): ")
+def genIntValue(prompt: str):
+    while True:
+        try:
+            return int(input(prompt))
+        except ValueError:
+            print("Invalid input. Please enter an integer.")
 
-    if choice == '7':
-        print("Exiting the calculator.")
-        break
+def main():
+    while True:
+        print("Make a feature selection:")
+        print("1. +")
+        print("2. -")
+        print("3. *")
+        print("4. /")
+        print("5. **")
+        print("6. Square root extraction")
+        print("7. Exit")
 
-    if not validate_operator(choice):
-        print("Invalid operator. Please choose a valid operator.")
-        continue
+        choice = input("Enter the operator of the function to perform (+/-/*/...): ")
 
-    try:
-        n1 = float(input("First number: "))
-        result = None
+        if choice == '7':
+            print("Exiting the calculator.")
+            break
 
-        if choice in ['+', '-', '*', '/', '**']:
-            n2 = float(input("Second number: "))
+        if not validate_operator(choice):
+            print("Invalid operator. Please choose a valid operator.")
+            continue
 
-            if choice == '+':
-                result = add(n1, n2)
-            elif choice == '-':
-                result = subtract(n1, n2)
-            elif choice == '*':
-                result = multiply(n1, n2)
-            elif choice == '/':
-                result = divide(n1, n2)
-            elif choice == '**':
-                result = power(n1, n2)
+        try:
+            n1 = genFloatValue("First number: ")
+            result = None
 
-        elif choice == 'sqrt':
-            result = square_root(n1)
+            if choice in ['+', '-', '*', '/', '**']:
+                n2 = genFloatValue("Second number: ")
 
-        print("Result:", result)
+                if choice == '+':
+                    result = add(n1, n2)
+                elif choice == '-':
+                    result = subtract(n1, n2)
+                elif choice == '*':
+                    result = multiply(n1, n2)
+                elif choice == '/':
+                    result = divide(n1, n2)
+                elif choice == '**':
+                    result = power(n1, n2)
 
-    except ValueError as e:
-        print("Error:", e)
-    except Exception as e:
-        print("An error occurred:", e)
+            elif choice == 'sqrt':
+                result = square_root(n1)
+
+            print("Result:", result)
+
+        except ValueError as e:
+            print("Error:", e)
+        except Exception as e:
+            print("An error occurred:", e)
+
+if __name__ == "__main__":
+    main()
+
