@@ -1,0 +1,16 @@
+try:
+    result = "5" + 2
+except TypeError as e:
+    print("Caught an exception:", e)
+
+try:
+    with open("nonexistent.txt", "r") as file:
+        content = file.read()
+except FileNotFoundError as e:
+    print("Caught an exception:", e)
+
+my_dict = {"name": "John", "age": 30}
+try:
+    value = my_dict["city"]
+except KeyError as e:
+    print("Caught an exception:", e)
