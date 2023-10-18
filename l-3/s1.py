@@ -35,6 +35,7 @@ def genFloatValue(prompt: str):
         except ValueError:
             print("Invalid input. Please enter a valid number.")
 
+
 def genIntValue(prompt: str):
     while True:
         try:
@@ -93,4 +94,5 @@ def main():
 
 if __name__ == "__main__":
     main()
+
 
