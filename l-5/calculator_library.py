@@ -1,4 +1,4 @@
-# Бібліотека калькулятора
+
 # calculator_library.py
 
 import math

@@ -1,4 +1,3 @@
-
 with open("_input06.txt", "r") as file:
     lines = file.readlines()
 
