@@ -1,4 +1,3 @@
-# already sorted list
 list = [
     {"name": "Bob", "phone": "0631234567", "specialty": "125", "group": "kb-222"},
     {"name": "Emma", "phone": "0631234567", "specialty": "123", "group": "ce-123"},
@@ -8,18 +7,16 @@ list = [
 
 def printAllList():
     for elem in list:
-        strForPrint = "Student name is " + elem["name"] + ",  Phone is " + elem["phone"]+ \
+        strForPrint = "Student name is " + elem["name"] + ", Phone is " + elem["phone"] + \
                       ", Specialty is " + elem["specialty"] + ", Group is " + elem["group"]
         print(strForPrint)
-    return
 
 def addNewElement():
-    name = input("Pease enter student name: ")
+    name = input("Please enter student name: ")
     phone = input("Please enter student phone: ")
     specialty = input("Please enter specialty: ")
     group = input("Please enter group: ")
     newItem = {"name": name, "phone": phone, "specialty": specialty, "group": group}
-    # find insert position
     insertPosition = 0
     for item in list:
         if name > item["name"]:
@@ -28,26 +25,31 @@ def addNewElement():
             break
     list.insert(insertPosition, newItem)
     print("New element has been added")
-    return
 
 def deleteElement():
-    name = input("Please enter name to be delated: ")
-    deletePosition = -1
+    name = input("Please enter name to be deleted: ")
     for item in list:
         if name == item["name"]:
-            deletePosition = list.index(item)
-            break
-    if deletePosition == -1:
-        print("Element was not found")
-    else:
-        print("Dele position " + str(deletePosition))
-        list.pop(deletePosition)
-    return
+            list.remove(item)
+            print("Student has been deleted")
+            return
+    print("Element not found")
 
 def updateElement():
     name = input("Please enter name to be updated: ")
     for item in list:
         if name == item["name"]:
+            new_name = input("Enter the new name (or press Enter to keep the same): ")
+            if new_name:
+                item["name"] = new_name
+                list.remove(item)
+                insertPosition = 0
+                for i, existing_item in enumerate(list):
+                    if new_name > existing_item["name"]:
+                        insertPosition = i + 1
+                    else:
+                        break
+                list.insert(insertPosition, item)
             print("Select field to update:")
             print("1. Phone")
             print("2. Specialty")
@@ -64,30 +66,28 @@ def updateElement():
             print("Student information has been updated")
             return
     print("Student not found")
-    # implementation required
 
 def main():
     while True:
-        chouse = input("Please specify the action [ C create, U update, D delete, P print,  X exit ] ")
-        match chouse:
-            case "C" | "c":
-                print("New element will be created:")
-                addNewElement()
-                printAllList()
-            case "U" | "u":
-                print("Existing element will be updated")
-            case "D" | "d":
-                print("Element will be deleted")
-                deleteElement()
-            case "P" | "p":
-                print("List will be printed")
-                printAllList()
-            case "X" | "x":
-                print("Exit()")
-                break
-            case _:
-                print("Wrong chouse")
+        choice = input("Please specify the action [C create, U update, D delete, P print, X exit]: ")
+        if choice.lower() == "c":
+            print("New element will be created:")
+            addNewElement()
+            printAllList()
+        elif choice.lower() == "u":
+            print("Existing element will be updated:")
+            updateElement()
+        elif choice.lower() == "d":
+            print("Element will be deleted:")
+            deleteElement()
+        elif choice.lower() == "p":
+            print("List will be printed:")
+            printAllList()
+        elif choice.lower() == "x":
+            print("Exiting the program.")
+            break
+        else:
+            print("Wrong choice")
 
 if __name__ == "__main__":
     main()
-    
