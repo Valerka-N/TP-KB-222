@@ -1,66 +1,62 @@
+
 import unittest
-import io
-import os
 import csv
+import os
+import io
 from unittest.mock import patch
+from io import StringIO
 from lab2 import *
 
-class TestLab2Script(unittest.TestCase):
+class TestLab2(unittest.TestCase):
+
     def setUp(self):
-        self.test_file = "lab2.csv"
-        self.test_data = [
-            {"name": "John", "phone": "9675643454", "specialty": "21", "group": "12"},
-            {"name": "Alice", "phone": "734586290", "specialty": "19", "group": "22"},
+        self.student_list = [
+            {"name": "Alice", "phone": "123456789", "specialty": "CS", "group": "A"},
+            {"name": "Zak", "phone": "987654321", "specialty": "IT", "group": "B"}
         ]
 
-    def tearDown(self):
+    def load_and_sort_data(file_name):
         try:
-            os.remove(self.test_file)
+            with open(file_name, 'r') as file:
+                reader = csv.DictReader(file)
+                student_list = sorted([row for row in reader], key=lambda x: x['name'])
+            print("Data loaded successfully from", file_name)
+            return student_list
         except FileNotFoundError:
-            pass
+            print("File not found. Starting with an empty list.")
+            return []
+        except Exception as e:
+            print("Error loading data:", str(e))
+            return []
 
-    def test_add(self):
-        with open(self.test_file, "w", newline="", encoding="utf-8") as file:
-            fieldnames = ["name", "phone", "specialty", "group"]
-            writer = csv.DictWriter(file, fieldnames=fieldnames)
-            writer.writeheader()
-            writer.writerows(self.test_data)
+    def test_save_data_to_csv(self):
+        with patch('sys.stdout', new_callable=StringIO) as mock_stdout:
+            save_data_to_csv('lab-02/test_data.csv', self.student_list)
+            self.student_list = load_and_sort_data('lab-02/test_data.csv')
+        self.assertIn('Data saved successfully to lab-02/test_data.csv', mock_stdout.getvalue().strip())
+        self.assertIn('Data loaded successfully from lab-02/test_data.csv', mock_stdout.getvalue().strip())
+        expected_sorted_list = sorted(self.student_list, key=lambda x: x['name'])
+        self.assertEqual(self.student_list, expected_sorted_list)
 
-        slist = []
-        updated_list = add(self.test_file, slist)
-        self.assertEqual(updated_list, self.test_data)
+    @patch('builtins.input', side_effect=['John', '123456789', 'IT', 'C'])
+    def test_add_new_element(self, mock_input):
+        add_new_element(self.student_list)
+        self.assertEqual(len(self.student_list), 3)
+        self.assertEqual(self.student_list[1]['name'], 'John')
 
-    def test_save(self):
-        slist = self.test_data
-        save(self.test_file, slist)
-        self.assertTrue(os.path.exists(self.test_file))
+    @patch('builtins.input', side_effect=['Alice', '2', 'NewValue', '3', 'UpdatedGroup'])
+    def test_update_element(self, mock_input):
+        with patch('sys.stdout', new_callable=StringIO) as mock_stdout:
+            update_element(self.student_list)
+            self.student_list = sorted(self.student_list, key=lambda x: x['name'])
+        self.assertIn('Student information has been updated', mock_stdout.getvalue().strip())
 
-    def test_printAllList(self):
-        slist = self.test_data
-        with patch('sys.stdout', new_callable=io.StringIO) as mock_stdout:
-            printAllList(slist)
-            output = mock_stdout.getvalue()
-            self.assertIn("John", output)
-            self.assertIn("Alice", output)
-
-    def test_addNewElement(self):
-        slist = self.test_data
-        with patch('builtins.input', side_effect=["New Student", "9675643454", "22", "14"]):
-            addNewElement(slist)
-            self.assertEqual(len(slist), 3)
-
-    def test_deleteElement(self):
-        slist = self.test_data
-        with patch('builtins.input', return_value="Alice"):
-            deleteElement(slist)
-            self.assertEqual(len(slist), 1)
-
-    def test_updateElement(self):
-        slist = self.test_data
-        with patch('builtins.input', side_effect=["Alice", "New Alice", "734586290", "26", "45"]):
-            updateElement(slist)
-            self.assertEqual(slist[0]["name"], "John")
-
+    @patch('builtins.input', side_effect=['Alice'])
+    def test_delete_element(self, mock_input):
+        delete_element(self.student_list)
+        self.student_list = sorted(self.student_list, key=lambda x: x['name'])
+        self.assertEqual(len(self.student_list), 1)
+        self.assertNotIn('Alice', [student['name'] for student in self.student_list])
 
 if __name__ == '__main__':
     unittest.main()
