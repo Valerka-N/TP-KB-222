@@ -1,3 +1,4 @@
+
 def is_operator(char):
     return char in {'+', '-', '*', '/'}
 
